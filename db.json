@@ -1,0 +1,30 @@
+{
+  "brackets": [
+    {
+      "id": 1,
+      "name": "Лига Чемпионов",
+      "status": true,
+      "createdAt":"Mon Dec 26 2022 09:39:34 GMT+0300 (Москва, стандартное время)",
+      "type": "single elimination",
+      "comands": ["Спартак","Динамо"]
+    },
+    {
+      "id": 2,
+      "name": "ЧМ2022",
+      "status": false,
+      "createdAt":"Mon Dec 27 2022 09:39:34 GMT+0300 (Москва, стандартное время)",
+      "type": "double elimination",
+      "comands": ["Спартак","Динамо","Спартак","Динамо","Спартак","Динамо","Спартак","Динамо"]
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
