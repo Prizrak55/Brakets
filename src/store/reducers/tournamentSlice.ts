@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export enum StatusTournament {
-  active,
-  inactive,
+  Inactive,
+  Active,
 }
-export enum TypeTournament {
-  singleElimination,
-  doubleElimination,
-  roundRobin,
-  groupState,
-}
+export type TypeTournament =
+  | "singleElimination"
+  | "doubleElimination"
+  | "roundRobin"
+  | "groupState"
+  | "";
 
-export interface TournamentsState {
+export interface Tournament {
   id: string;
   name: string;
   status: StatusTournament;
@@ -19,8 +19,10 @@ export interface TournamentsState {
   type: TypeTournament;
   comands?: string[];
 }
-
-const initialState: any = {
+export interface TournamentsState {
+  tournaments: Tournament[];
+}
+const initialState: TournamentsState = {
   tournaments: [],
 };
 
@@ -28,7 +30,7 @@ const tournamentSlice = createSlice({
   name: "tournament",
   initialState,
   reducers: {
-    setTourtaments(state, action: PayloadAction<TournamentsState>) {
+    setTourtaments(state, action: PayloadAction<Tournament[]>) {
       state.tournaments = action.payload;
     },
   },

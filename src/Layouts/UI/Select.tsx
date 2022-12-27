@@ -31,7 +31,9 @@ export const Select = ({ change, data }: { change: any; data: string[] }) => {
   return (
     <StyledSelect onChange={(e) => change(data[Number(e.target.value)])}>
       {data.map((item: any, index: number) => (
-        <StyledOption value={String(index)}>{item}</StyledOption>
+        <StyledOption key={index} value={String(index)}>
+          {item}
+        </StyledOption>
       ))}
     </StyledSelect>
   );

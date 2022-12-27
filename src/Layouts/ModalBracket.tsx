@@ -5,12 +5,12 @@ import { Input } from "./UI/Input";
 import { Select } from "./UI/Select";
 import { useNavigate } from "react-router-dom";
 import uuid from "react-uuid";
-import { useDispatch } from "react-redux";
 import {
   StatusTournament,
-  TournamentsState,
+  Tournament,
   TypeTournament,
-} from "../../store/reducers/tournamentSlice";
+} from "../store/reducers/tournamentSlice";
+import axios from "axios";
 
 const Conteiner = styled.div`
   top: 50%;
@@ -31,30 +31,34 @@ const Wrapper = styled.div`
 
 const ModalBracket = () => {
   const [name, setName] = useState("");
-  const [typeBracket, setTypeBracket] = useState<String>("");
+  const [typeBracket, setTypeBracket] =
+    useState<TypeTournament>("singleElimination");
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const changeName = (value: string) => {
     setName(value);
   };
-  const changeType = (value: string) => {
+  const changeType = (value: TypeTournament) => {
     setTypeBracket(value);
   };
-  const createBracket = () => {
-    if (name === "" && typeBracket === "" && typeBracket !== "Тип турнира") {
+  const createBracket = async () => {
+    if (name === "") {
       alert("Заполните форму");
       return "";
     }
-    const data: TournamentsState = {
+    const data: Tournament = {
       id: uuid(),
       name: name,
-      status: StatusTournament.inactive,
+      status: StatusTournament.Inactive,
       createAt: new Date(),
-      type: TypeTournament.singleElimination,
+      type: typeBracket,
       comands: [],
     };
+
+    await axios
+      .post("http://localhost:3000/brackets", data)
+      .catch((err) => console.log(err));
 
     navigate("/create-bracket");
   };
@@ -68,7 +72,8 @@ const ModalBracket = () => {
           onChange={(e) => changeName(e.target.value)}
           placeholder="Название"
         />
-        <Select change={changeType} data={["Тип турнира", "сингл", "Дабл"]} />
+        <Select change={changeType} data={TypeTournaments} />
+
         <Button
           onClick={createBracket}
           margin="10px 0 10px 0"
@@ -79,5 +84,12 @@ const ModalBracket = () => {
     </Conteiner>
   );
 };
+
+const TypeTournaments = [
+  "singleElimination",
+  "doubleElimination",
+  "roundRobin",
+  "groupState",
+];
 
 export default ModalBracket;

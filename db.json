@@ -3,28 +3,38 @@
     {
       "id": 1,
       "name": "Лига Чемпионов",
-      "status": true,
-      "createdAt":"Mon Dec 26 2022 09:39:34 GMT+0300 (Москва, стандартное время)",
-      "type": "single elimination",
-      "comands": ["Спартак","Динамо"]
+      "status": 1,
+      "createAt": "Mon Dec 26 2022 09:39:34 GMT+0300 (Москва, стандартное время)",
+      "type": "singleElimination",
+      "comands": [
+        "Спартак",
+        "Динамо"
+      ]
     },
     {
       "id": 2,
       "name": "ЧМ2022",
-      "status": false,
-      "createdAt":"Mon Dec 27 2022 09:39:34 GMT+0300 (Москва, стандартное время)",
-      "type": "double elimination",
-      "comands": ["Спартак","Динамо","Спартак","Динамо","Спартак","Динамо","Спартак","Динамо"]
-    }
-  ],
-  "comments": [
+      "status": 0,
+      "createAt": "Mon Dec 27 2022 09:39:34 GMT+0300 (Москва, стандартное время)",
+      "type": "doubleElimination",
+      "comands": [
+        "Спартак",
+        "Динамо",
+        "Спартак",
+        "Динамо",
+        "Спартак",
+        "Динамо",
+        "Спартак",
+        "Динамо"
+      ]
+    },
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "id": "c03b469c-99e9-d9c0-f804-f773e7b65e9c",
+      "name": "21",
+      "status": 0,
+      "createAt": "2022-12-27T11:08:04.985Z",
+      "type": "singleElimination",
+      "comands": []
     }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
+  ]
 }

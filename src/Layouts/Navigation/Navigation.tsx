@@ -33,7 +33,6 @@ const Navigation = () => {
   const [open, setOpen] = useState(false);
 
   const toggleTheme = () => {
-    console.log(theme);
     setTheme(theme === "Light" ? "Dark" : "Light");
   };
 
