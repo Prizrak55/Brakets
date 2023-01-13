@@ -11,6 +11,14 @@ import {
   TypeTournament,
 } from "../store/reducers/tournamentSlice";
 import axios from "axios";
+const CloseWrapper = styled.div`
+  background-color: rgba(30, 30, 30, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+`;
 
 const Conteiner = styled.div`
   top: 50%;
@@ -29,7 +37,11 @@ const Wrapper = styled.div`
   box-shadow: var(--shadow);
 `;
 
-const ModalBracket = () => {
+type Props = {
+  close: Function;
+};
+
+const ModalBracket = ({ close }: Props) => {
   const [name, setName] = useState("");
   const [typeBracket, setTypeBracket] =
     useState<TypeTournament>("singleElimination");
@@ -64,24 +76,26 @@ const ModalBracket = () => {
   };
 
   return (
-    <Conteiner onClick={(e) => e.stopPropagation()}>
-      <Wrapper>
-        <Input
-          type={"text"}
-          value={name}
-          onChange={(e) => changeName(e.target.value)}
-          placeholder="Название"
-        />
-        <Select change={changeType} data={TypeTournaments} />
+    <CloseWrapper onClick={(e) => close(e)}>
+      <Conteiner onClick={(e) => e.stopPropagation()}>
+        <Wrapper>
+          <Input
+            type={"text"}
+            value={name}
+            onChange={(e) => changeName(e.target.value)}
+            placeholder="Название"
+          />
+          <Select change={changeType} data={TypeTournaments} />
 
-        <Button
-          onClick={createBracket}
-          margin="10px 0 10px 0"
-          width={"200px"}
-          text="Создать турнир"
-        />
-      </Wrapper>
-    </Conteiner>
+          <Button
+            onClick={createBracket}
+            margin="10px 0 10px 0"
+            width={"200px"}
+            text="Создать турнир"
+          />
+        </Wrapper>
+      </Conteiner>
+    </CloseWrapper>
   );
 };
 

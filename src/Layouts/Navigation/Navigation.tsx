@@ -40,7 +40,8 @@ const Navigation = () => {
     setOpen(!open);
   };
 
-  const closeModal = () => {
+  const closeModal = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
     if (open) {
       setOpen(false);
     }
@@ -51,7 +52,7 @@ const Navigation = () => {
   }, [theme]);
 
   return (
-    <div onClick={() => closeModal()}>
+    <div>
       <HeaderEl>
         <Conteiner>
           <Wrapper>
@@ -66,7 +67,7 @@ const Navigation = () => {
           </Wrapper>
         </Conteiner>
       </HeaderEl>
-      {open && <ModalBracket />}
+      {open && <ModalBracket close={closeModal} />}
       <Outlet />
     </div>
   );

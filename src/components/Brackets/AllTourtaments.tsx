@@ -6,6 +6,8 @@ import {
 import axios from "axios";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../store";
+import { FiEdit2 } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const Conteiner = styled.div`
   box-shadow: var(--shadow);
@@ -36,6 +38,22 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+const TextAndEditWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const BorderEdit = styled.div`
+  cursor: pointer;
+  display: inline-flex;
+  padding: 2px;
+  border: 2px solid #b95959;
+  border-radius: 4px;
+  :hover {
+    opacity: 0.8;
+  }
 `;
 
 const AllTourtaments = () => {
@@ -71,20 +89,29 @@ const AllTourtaments = () => {
           )
           .map((item: Tournament) => {
             return (
-              <Conteiner key={item.id}>
-                <TextH2>{item.name}</TextH2>
-                <Wrapper>
-                  <Status active={Boolean(item.status)}>
-                    {item.status ? "активен" : "не активен"}
-                  </Status>
-                  <Text>
-                    {`${new Date(item.createAt).getDate()}:${new Date(
-                      item.createAt
-                    ).getMonth()}:${new Date(item.createAt).getFullYear()}`}
-                  </Text>
-                </Wrapper>
-                <Text>Команд: {item.comands?.length}</Text>
-              </Conteiner>
+              <Link to={`/tournament/${item.id}`}>
+                <Conteiner key={item.id}>
+                  <TextAndEditWrapper>
+                    <TextH2>{item.name}</TextH2>
+                    <Link to={`/redactor-tournament/${item.id}`}>
+                      <BorderEdit>
+                        <FiEdit2 />
+                      </BorderEdit>
+                    </Link>
+                  </TextAndEditWrapper>
+                  <Wrapper>
+                    <Status active={Boolean(item.status)}>
+                      {item.status ? "активен" : "не активен"}
+                    </Status>
+                    <Text>
+                      {`${new Date(item.createAt).getDate()}:${new Date(
+                        item.createAt
+                      ).getMonth()}:${new Date(item.createAt).getFullYear()}`}
+                    </Text>
+                  </Wrapper>
+                  <Text>Команд: {item.comands?.length}</Text>
+                </Conteiner>
+              </Link>
             );
           })}
     </>

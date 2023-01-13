@@ -30,11 +30,21 @@
     },
     {
       "id": "c03b469c-99e9-d9c0-f804-f773e7b65e9c",
-      "name": "21",
-      "status": 0,
+      "name": "dwqwewqewqww",
+      "status": 1,
       "createAt": "2022-12-27T11:08:04.985Z",
       "type": "singleElimination",
       "comands": []
+    }
+  ],
+  "teams": [
+    {
+      "id": 1,
+      "name": "Спартак"
+    },
+    {
+      "id": 1,
+      "name": "ЦСКА"
     }
   ]
 }
