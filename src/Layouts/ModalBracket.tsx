@@ -37,11 +37,11 @@ const Wrapper = styled.div`
   box-shadow: var(--shadow);
 `;
 
-type Props = {
-  close: Function;
+type IModalBracket = {
+  close: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
 
-const ModalBracket = ({ close }: Props) => {
+const ModalBracket: React.FC<IModalBracket> = ({ close }) => {
   const [name, setName] = useState("");
   const [typeBracket, setTypeBracket] =
     useState<TypeTournament>("singleElimination");
@@ -54,7 +54,7 @@ const ModalBracket = ({ close }: Props) => {
   const changeType = (value: TypeTournament) => {
     setTypeBracket(value);
   };
-  const createBracket = async () => {
+  const createBracket = async (e: any) => {
     if (name === "") {
       alert("Заполните форму");
       return "";
@@ -70,6 +70,7 @@ const ModalBracket = ({ close }: Props) => {
 
     await axios
       .post("http://localhost:3000/brackets", data)
+      .then((response) => close(e))
       .catch((err) => console.log(err));
 
     navigate("/create-bracket");
@@ -85,7 +86,7 @@ const ModalBracket = ({ close }: Props) => {
             onChange={(e) => changeName(e.target.value)}
             placeholder="Название"
           />
-          <Select change={changeType} data={TypeTournaments} />
+          <Select handleChange={changeType} data={TypeTournaments} />
 
           <Button
             onClick={createBracket}

@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import {
-  setTourtaments,
+  deleteTournament,
+  getTournaments,
   Tournament,
 } from "../../store/reducers/tournamentSlice";
-import axios from "axios";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { FiEdit2 } from "react-icons/fi";
+import { FiEdit2, FiXCircle } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const Conteiner = styled.div`
@@ -55,65 +55,89 @@ const BorderEdit = styled.div`
     opacity: 0.8;
   }
 `;
+const BorderDelete = styled.div`
+  cursor: pointer;
+  display: inline-flex;
+  padding: 2px;
+  margin-left: 2px;
+  border: 2px solid #7659b9;
+  border-radius: 4px;
+  :hover {
+    opacity: 0.8;
+  }
+`;
 
 const AllTourtaments = () => {
+  const { tournaments, status, error } = useAppSelector(
+    ({ tournament }) => tournament
+  );
+  const { filterName, filterType } = useAppSelector(({ filter }) => filter);
+
   const dispatch = useAppDispatch();
 
-  const tournaments = useAppSelector(
-    ({ tournament }) => tournament.tournaments
-  );
-  const filterName = useAppSelector(({ filter }) => filter.filterName);
-  const filterType = useAppSelector(({ filter }) => filter.filterType);
+  const filterTournaments = useMemo(() => {
+    if (!filterName && !filterType) {
+      return tournaments;
+    } else {
+      return tournaments.filter(
+        (itemFilter: Tournament) =>
+          itemFilter.name.toLowerCase().search(filterName.toLowerCase()) !==
+            -1 &&
+          itemFilter.type.toLowerCase().search(filterType.toLowerCase()) !== -1
+      );
+    }
+  }, [tournaments, filterName, filterType]);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/brackets`)
-      .then((response) => dispatch(setTourtaments(response.data)))
-      .catch((err) => console.log(err));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    dispatch(getTournaments());
+  }, [dispatch]);
+
+  const deleteOneTournament = (e: any, id: string) => {
+    e.preventDefault();
+    dispatch(deleteTournament(id));
+  };
+
+  const transformDate = (date: Date) => {
+    const newDate = new Date(date);
+    const transformDate = `${newDate.getDate()}:${newDate.getMonth()}:${newDate.getFullYear()}`;
+    return transformDate;
+  };
 
   return (
     <>
-      {tournaments &&
-        tournaments
-          .filter(
-            (itemFilter: Tournament) =>
-              itemFilter.name.toLowerCase().search(filterName.toLowerCase()) !==
-              -1
-          )
-          .filter(
-            (itemType: Tournament) =>
-              itemType.type.toLowerCase().search(filterType.toLowerCase()) !==
-              -1
-          )
-          .map((item: Tournament) => {
-            return (
-              <Link to={`/tournament/${item.id}`}>
-                <Conteiner key={item.id}>
-                  <TextAndEditWrapper>
-                    <TextH2>{item.name}</TextH2>
-                    <Link to={`/redactor-tournament/${item.id}`}>
-                      <BorderEdit>
-                        <FiEdit2 />
-                      </BorderEdit>
-                    </Link>
-                  </TextAndEditWrapper>
-                  <Wrapper>
-                    <Status active={Boolean(item.status)}>
-                      {item.status ? "активен" : "не активен"}
-                    </Status>
-                    <Text>
-                      {`${new Date(item.createAt).getDate()}:${new Date(
-                        item.createAt
-                      ).getMonth()}:${new Date(item.createAt).getFullYear()}`}
-                    </Text>
-                  </Wrapper>
-                  <Text>Команд: {item.comands?.length}</Text>
-                </Conteiner>
-              </Link>
-            );
-          })}
+      {status === "loading" && <h2>Loading...</h2>}
+      {error && <h2>Error {error}</h2>}
+
+      {filterTournaments.map((item: Tournament) => {
+        return (
+          <Link key={item.id} to={`/tournament/${item.id}`}>
+            <Conteiner>
+              <TextAndEditWrapper>
+                <TextH2>{item.name}</TextH2>
+                <div>
+                  <Link to={`/redactor-tournament/${item.id}`}>
+                    <BorderEdit>
+                      <FiEdit2 />
+                    </BorderEdit>
+                  </Link>
+                  <BorderDelete
+                    onClick={(e) => deleteOneTournament(e, item.id)}
+                  >
+                    <FiXCircle />
+                  </BorderDelete>
+                </div>
+              </TextAndEditWrapper>
+              <Wrapper>
+                <Status active={Boolean(item.status)}>
+                  {item.status ? "активен" : "не активен"}
+                </Status>
+                <Text>{transformDate(item.createAt)}</Text>
+              </Wrapper>
+              <Text>Команд: {item.comands?.length}</Text>
+            </Conteiner>
+          </Link>
+        );
+      })}
     </>
   );
 };

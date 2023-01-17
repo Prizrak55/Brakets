@@ -5,54 +5,69 @@ import styled from "styled-components";
 import { Button } from "../../Layouts/UI/Button";
 import { Input } from "../../Layouts/UI/Input";
 import { Select } from "../../Layouts/UI/Select";
-import { StatusTournament } from "../../store/reducers/tournamentSlice";
+import { useAppDispatch, useAppSelector } from "../../store";
+import {
+  getOneTournament,
+  StatusTournament,
+  Tournament,
+  updateOneTournament,
+} from "../../store/reducers/tournamentSlice";
 
 const Title = styled.h1`
   font-size: 16px;
   margin: 10px;
 `;
 const Redactor = () => {
-  const [tournament, setTournament] = useState<any>({});
-  const [status, setStatus] = useState(["не активен", "активен"]);
-  const params = useParams();
+  const [redactorTournament, setRedactorTournament] = useState<any>();
+  const [status] = useState(["не активен", "активен"]);
+  const { tournament } = useAppSelector(({ tournament }) => tournament);
+  console.log(tournament);
+  const { id }: any = useParams();
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/brackets/${params.id}`)
-      .then((response) => {
-        setTournament(response.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    dispatch(getOneTournament(id));
+  }, [dispatch, id]);
 
-  const changeName = (e: { target: { value: string } }) => {
-    setTournament({ ...tournament, name: e.target.value });
-  };
+  useEffect(() => {
+    setRedactorTournament(tournament);
+  }, [tournament]);
 
-  const changeStatus = (value: string) => {
-    const newStatus: number =
-      value === "активен" ? StatusTournament.Active : StatusTournament.Inactive;
-    setTournament({ ...tournament, status: newStatus });
+  const changeName = (e: { target: { value: string } }, name: string) => {
+    if (name === "status") {
+      const newStatus: number =
+        e.target.value === "активен"
+          ? StatusTournament.Active
+          : StatusTournament.Inactive;
+      tournament &&
+        setRedactorTournament({ ...redactorTournament, status: newStatus });
+      return;
+    }
+
+    tournament &&
+      setRedactorTournament({ ...redactorTournament, [name]: e.target.value });
   };
 
   const saveChange = () => {
-    axios
-      .put(`http://localhost:3000/brackets/${params.id}`, tournament)
-      .then((response) => console.log(response.status))
-      .catch((err) => console.log(err));
+    dispatch(updateOneTournament(redactorTournament));
   };
 
   return (
     <>
       <Title>Редактирование турнира</Title>
-      <Input
-        width="200px"
-        placeholder="Название"
-        value={tournament.name}
-        onChange={changeName}
-      />
-      <Select change={changeStatus} data={status} />
-      <Button onClick={saveChange} text="Сохранить" />
+      {redactorTournament && (
+        <>
+          <Input
+            width="200px"
+            placeholder="Название"
+            value={redactorTournament.name}
+            onChange={(e) => changeName(e, "name")}
+          />
+          <Select handleChange={(e) => changeName(e, "status")} data={status} />
+          <Button onClick={saveChange} text="Сохранить" />
+        </>
+      )}
     </>
   );
 };

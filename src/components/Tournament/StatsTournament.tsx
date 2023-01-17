@@ -1,7 +1,14 @@
 import axios from "axios";
+import { errorMonitor } from "events";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useAppDispatch, useAppSelector } from "../../store";
+import {
+  getOneTournament,
+  Tournament,
+} from "../../store/reducers/tournamentSlice";
 
 const Wrapper = styled.div`
   display: flex;
@@ -26,30 +33,37 @@ const ConteinerTeam = styled.div`
 `;
 
 const StatsTournament = () => {
-  const params = useParams();
-  const [tournament, setTournament] = useState<any>("");
+  const { id }: any = useParams();
+  const { tournament, error, status } = useAppSelector(
+    ({ tournament }) => tournament
+  );
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/brackets/${params.id}`)
-      .then((resp) => setTournament(resp.data))
-      .catch((err) => console.log(err));
-  }, []);
+    dispatch(getOneTournament(id));
+  }, [dispatch, id]);
 
   return (
     <>
+      {status === "loading" && <h2>загрузка</h2>}
+      {error && <h2>Ошибка: {error}</h2>}
       {tournament && (
         <Wrapper>
           <Title>{tournament.name}</Title>
           <Text>{tournament.status ? "активен" : "завершен"}</Text>
-          <Text>{tournament.createAt}</Text>
+          <Text>{String(tournament.createAt)}</Text>
           <Text>{tournament.type}</Text>
 
           <ConteinerTeam>
             <Text>Команды: </Text>
-            {tournament?.comands.map((comand: string[]) => {
-              return <Text>{comand}</Text>;
-            })}
+            {!!tournament.comands && (
+              <>
+                {tournament.comands.map((comand) => {
+                  return <Text>{comand}</Text>;
+                })}
+              </>
+            )}
           </ConteinerTeam>
         </Wrapper>
       )}

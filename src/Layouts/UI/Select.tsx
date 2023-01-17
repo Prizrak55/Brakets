@@ -1,6 +1,8 @@
 import styled from "styled-components";
+import { TypeTournament } from "../../store/reducers/tournamentSlice";
+
 interface Props {
-  width?: string;
+  width: string;
 }
 const StyledSelect = styled.select<Props>`
   font-size: 18px;
@@ -30,19 +32,22 @@ const StyledOption = styled.option`
     color: var(--colors-text);
   }
 `;
-export const Select = ({
-  change,
-  data,
-  width = "100%",
-}: {
-  change: any;
+
+type ISelect = {
+  handleChange: (value: any) => void;
   data: string[];
   width?: string;
+};
+
+export const Select: React.FC<ISelect> = ({
+  handleChange,
+  data,
+  width = "100%",
 }) => {
   return (
     <StyledSelect
       width={width}
-      onChange={(e) => change(data[Number(e.target.value)])}
+      onChange={(e) => handleChange(data[Number(e.target.value)])}
     >
       {data.map((item: any, index: number) => (
         <StyledOption key={index} value={String(index)}>

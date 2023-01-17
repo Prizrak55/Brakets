@@ -13,7 +13,7 @@
     },
     {
       "id": 2,
-      "name": "ЧМ2022",
+      "name": "ЧМ20222",
       "status": 0,
       "createAt": "Mon Dec 27 2022 09:39:34 GMT+0300 (Москва, стандартное время)",
       "type": "doubleElimination",
@@ -27,14 +27,6 @@
         "Спартак",
         "Динамо"
       ]
-    },
-    {
-      "id": "c03b469c-99e9-d9c0-f804-f773e7b65e9c",
-      "name": "dwqwewqewqww",
-      "status": 1,
-      "createAt": "2022-12-27T11:08:04.985Z",
-      "type": "singleElimination",
-      "comands": []
     }
   ],
   "teams": [
