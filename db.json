@@ -3,7 +3,7 @@
     {
       "id": 1,
       "name": "Лига Чемпионов",
-      "status": 1,
+      "status": 0,
       "createAt": "Mon Dec 26 2022 09:39:34 GMT+0300 (Москва, стандартное время)",
       "type": "singleElimination",
       "comands": [
@@ -14,7 +14,7 @@
     {
       "id": 2,
       "name": "ЧМ20222",
-      "status": 0,
+      "status": 1,
       "createAt": "Mon Dec 27 2022 09:39:34 GMT+0300 (Москва, стандартное время)",
       "type": "doubleElimination",
       "comands": [

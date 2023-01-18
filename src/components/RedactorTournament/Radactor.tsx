@@ -18,9 +18,8 @@ const Title = styled.h1`
 `;
 const Redactor = () => {
   const [redactorTournament, setRedactorTournament] = useState<any>();
-  const [status] = useState(["не активен", "активен"]);
+
   const { tournament } = useAppSelector(({ tournament }) => tournament);
-  console.log(tournament);
   const { id } = useParams();
 
   const dispatch = useAppDispatch();
@@ -33,19 +32,20 @@ const Redactor = () => {
     setRedactorTournament(tournament);
   }, [tournament]);
 
-  const changeName = (e: { target: { value: string } }, name: string) => {
-    if (name === "status") {
+  const changeName = (e: { target: { value: string } }) => {
+    tournament &&
+      setRedactorTournament({ ...redactorTournament, name: e.target.value });
+  };
+
+  const changeStatus = (value: string) => {
+    if (value) {
       const newStatus: number =
-        e.target.value === "активен"
+        value === "активен"
           ? StatusTournament.Active
           : StatusTournament.Inactive;
       tournament &&
         setRedactorTournament({ ...redactorTournament, status: newStatus });
-      return;
     }
-
-    tournament &&
-      setRedactorTournament({ ...redactorTournament, [name]: e.target.value });
   };
 
   const saveChange = () => {
@@ -61,14 +61,16 @@ const Redactor = () => {
             width="200px"
             placeholder="Название"
             value={redactorTournament.name}
-            onChange={(e) => changeName(e, "name")}
+            onChange={(e) => changeName(e)}
           />
-          <Select handleChange={(e) => changeName(e, "status")} data={status} />
+          <Select handleChange={changeStatus} data={status} />
           <Button onClick={saveChange} text="Сохранить" />
         </>
       )}
     </>
   );
 };
+
+const status = ["не активен", "активен"];
 
 export default Redactor;
