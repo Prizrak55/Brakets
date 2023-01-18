@@ -37,23 +37,32 @@ type ISelect = {
   handleChange: (value: any) => void;
   data: string[];
   width?: string;
+  filterName?: string;
 };
 
 export const Select: React.FC<ISelect> = ({
   handleChange,
   data,
   width = "100%",
+  filterName = "выберите фильтр",
 }) => {
+  const change = (e: { target: { value: any } }) => {
+    if (e.target.value) {
+      handleChange(e.target.value);
+      return;
+    }
+    handleChange("");
+  };
   return (
-    <StyledSelect
-      width={width}
-      onChange={(e) => handleChange(data[Number(e.target.value)])}
-    >
-      {data.map((item: any, index: number) => (
-        <StyledOption key={index} value={String(index)}>
-          {item}
-        </StyledOption>
-      ))}
+    <StyledSelect width={width} onChange={change}>
+      <StyledOption value={""}>{filterName}</StyledOption>
+      {data.map((item: string, index: number) => {
+        return (
+          <StyledOption key={index} value={String(item)}>
+            {item}
+          </StyledOption>
+        );
+      })}
     </StyledSelect>
   );
 };

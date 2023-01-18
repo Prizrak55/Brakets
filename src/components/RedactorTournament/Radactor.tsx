@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from "../../store";
 import {
   getOneTournament,
   StatusTournament,
-  Tournament,
   updateOneTournament,
 } from "../../store/reducers/tournamentSlice";
 
@@ -22,12 +21,12 @@ const Redactor = () => {
   const [status] = useState(["не активен", "активен"]);
   const { tournament } = useAppSelector(({ tournament }) => tournament);
   console.log(tournament);
-  const { id }: any = useParams();
+  const { id } = useParams();
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getOneTournament(id));
+    id && dispatch(getOneTournament(id));
   }, [dispatch, id]);
 
   useEffect(() => {

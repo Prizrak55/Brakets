@@ -4,12 +4,24 @@ import axios from "axios";
 export interface Team {
   id: string;
   name: string;
+  players: string[];
+  reservePlayers: string[];
 }
 export interface Teams {
   teams: Team[];
   status: null | string;
-  error: any;
+  error: null | string | unknown;
 }
+
+export const createNewTeam = createAsyncThunk(
+  "team/createNewTeam",
+  async function (data: Team, { rejectWithValue, dispatch }) {
+    await axios
+      .post("http://localhost:3000/teams", data)
+      .then(() => dispatch(addTeam(data)))
+      .catch((err) => rejectWithValue(err.message));
+  }
+);
 
 export const getTeams = createAsyncThunk(
   "team/getTeams",

@@ -1,10 +1,10 @@
 import React from "react";
 import Navigation from "../Layouts/Navigation/Navigation";
 import { BrowserRouter, Routes as RoutesList, Route } from "react-router-dom";
-import Brackets from "../pages/Brackets";
-import CreateBrackets from "../pages/CreateBracket";
+import Brackets from "../pages/TournamentList";
+import CreateBrackets from "../pages/CreateTournament";
 import RedactorTournament from "../pages/RedactorTournament";
-import Tournament from "../pages/Tournament";
+import Tournament from "../pages/DetailedTournament";
 const Routes = () => {
   return (
     <BrowserRouter>

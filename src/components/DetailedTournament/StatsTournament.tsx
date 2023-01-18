@@ -2,7 +2,7 @@ import axios from "axios";
 import { errorMonitor } from "events";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Params, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../store";
 import {
@@ -33,7 +33,7 @@ const ConteinerTeam = styled.div`
 `;
 
 const StatsTournament = () => {
-  const { id }: any = useParams();
+  const { id } = useParams();
   const { tournament, error, status } = useAppSelector(
     ({ tournament }) => tournament
   );
@@ -41,7 +41,7 @@ const StatsTournament = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getOneTournament(id));
+    id && dispatch(getOneTournament(id));
   }, [dispatch, id]);
 
   return (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import styled from "styled-components";
 import { Button } from "./UI/Button";
 import { Input } from "./UI/Input";
@@ -6,11 +6,13 @@ import { Select } from "./UI/Select";
 import { useNavigate } from "react-router-dom";
 import uuid from "react-uuid";
 import {
+  createNewTournament,
   StatusTournament,
   Tournament,
   TypeTournament,
 } from "../store/reducers/tournamentSlice";
-import axios from "axios";
+import { useAppDispatch } from "../store";
+
 const CloseWrapper = styled.div`
   background-color: rgba(30, 30, 30, 0.5);
   position: absolute;
@@ -38,46 +40,50 @@ const Wrapper = styled.div`
 `;
 
 type IModalBracket = {
-  close: (e: React.MouseEvent<HTMLDivElement>) => void;
+  close: () => void;
 };
 
 const ModalBracket: React.FC<IModalBracket> = ({ close }) => {
   const [name, setName] = useState("");
-  const [typeBracket, setTypeBracket] =
-    useState<TypeTournament>("singleElimination");
+  const [typeBracket, setTypeBracket] = useState<TypeTournament>("");
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const changeName = (value: string) => {
     setName(value);
   };
+
   const changeType = (value: TypeTournament) => {
     setTypeBracket(value);
   };
-  const createBracket = async (e: any) => {
+
+  const createBracket = async () => {
     if (name === "") {
       alert("Заполните форму");
-      return "";
+      return;
+    }
+    if (typeBracket === "") {
+      alert("Заполните тип");
+      return;
     }
     const data: Tournament = {
       id: uuid(),
-      name: name,
+      name,
       status: StatusTournament.Inactive,
       createAt: new Date(),
       type: typeBracket,
       comands: [],
     };
 
-    await axios
-      .post("http://localhost:3000/brackets", data)
-      .then((response) => close(e))
-      .catch((err) => console.log(err));
+    dispatch(createNewTournament(data));
+    close();
 
     navigate("/create-bracket");
   };
 
   return (
-    <CloseWrapper onClick={(e) => close(e)}>
+    <CloseWrapper onClick={() => close()}>
       <Conteiner onClick={(e) => e.stopPropagation()}>
         <Wrapper>
           <Input
@@ -86,7 +92,11 @@ const ModalBracket: React.FC<IModalBracket> = ({ close }) => {
             onChange={(e) => changeName(e.target.value)}
             placeholder="Название"
           />
-          <Select handleChange={changeType} data={TypeTournaments} />
+          <Select
+            filterName="типа турнира"
+            handleChange={changeType}
+            data={TypeTournaments}
+          />
 
           <Button
             onClick={createBracket}

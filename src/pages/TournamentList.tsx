@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import AllTourtaments from "../components/Brackets/AllTourtaments";
-import Filter from "../components/Brackets/Filter";
+import AllTourtaments from "../components/TournamentList/AllTourtaments";
+import Filter from "../components/TournamentList/Filter";
 
 const Conteiner = styled.div`
   padding: 16px;

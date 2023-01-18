@@ -34,12 +34,15 @@ const Filter = () => {
         width={"200px"}
         placeholder="поиск"
       />
-      <Select handleChange={changeType} data={TypeTournaments} />
+      <Select
+        filterName="по типу"
+        handleChange={changeType}
+        data={TypeTournaments}
+      />
     </>
   );
 };
 const TypeTournaments = [
-  "",
   "singleElimination",
   "doubleElimination",
   "roundRobin",

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import StatsTournament from "../components/Tournament/StatsTournament";
+import StatsTournament from "../components/DetailedTournament/StatsTournament";
 
 const Conteiner = styled.div`
   padding: 8px;

@@ -79,6 +79,7 @@ const AllTourtaments = () => {
     if (!filterName && !filterType) {
       return tournaments;
     } else {
+      console.log(filterName, " ", filterType);
       return tournaments.filter(
         (itemFilter: Tournament) =>
           itemFilter.name.toLowerCase().search(filterName.toLowerCase()) !==
@@ -114,7 +115,7 @@ const AllTourtaments = () => {
             <Conteiner>
               <TextAndEditWrapper>
                 <TextH2>{item.name}</TextH2>
-                <div>
+                <>
                   <Link to={`/redactor-tournament/${item.id}`}>
                     <BorderEdit>
                       <FiEdit2 />
@@ -125,7 +126,7 @@ const AllTourtaments = () => {
                   >
                     <FiXCircle />
                   </BorderDelete>
-                </div>
+                </>
               </TextAndEditWrapper>
               <Wrapper>
                 <Status active={Boolean(item.status)}>
