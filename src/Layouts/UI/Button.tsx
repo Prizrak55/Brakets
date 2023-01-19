@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-export type ButtonProps = {
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void; // to handle onClick functions
+export type IButton = {
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   text: string;
-  disabled?: boolean; // make the button disabled or not
+  disabled?: boolean;
   primary?: string;
   width?: string;
   margin?: string;
@@ -30,12 +30,12 @@ const StyledButton = styled.button<Props>`
   border-color: var(--colors-ui-border);
 `;
 
-export const Button = ({
+export const Button: React.FC<IButton> = ({
   onClick,
   text,
   width = "auto",
   margin = "auto",
-}: ButtonProps) => {
+}) => {
   return (
     <StyledButton margin={margin} onClick={onClick} width={width}>
       {text}

@@ -1,6 +1,10 @@
 import styled from "styled-components";
+import { TypeTournament } from "../../store/reducers/tournamentSlice";
 
-const StyledSelect = styled.select`
+interface Props {
+  width: string;
+}
+const StyledSelect = styled.select<Props>`
   font-size: 18px;
   padding: 10px;
   margin: 10px;
@@ -8,6 +12,7 @@ const StyledSelect = styled.select`
   color: var(--colors-text);
   border-radius: 3px;
   width: 100%;
+  width: ${(props) => (props.width ? props.width : "100%")};
   border: none;
   ::placeholder {
     color: var(--colors-text);
@@ -27,14 +32,38 @@ const StyledOption = styled.option`
     color: var(--colors-text);
   }
 `;
-export const Select = ({ change, data }: { change: any; data: string[] }) => {
+
+type ISelect = {
+  handleChange: (value: any) => void;
+  data: string[];
+  width?: string;
+  filterName?: string;
+};
+
+export const Select: React.FC<ISelect> = ({
+  handleChange,
+  data,
+  width = "100%",
+  filterName = "выберите фильтр",
+}) => {
+  const change = (e: { target: { value: any } }) => {
+    console.log(e.target.value, "e.target.value");
+    if (e.target.value) {
+      handleChange(e.target.value);
+      return;
+    }
+    handleChange("");
+  };
   return (
-    <StyledSelect onChange={(e) => change(data[Number(e.target.value)])}>
-      {data.map((item: any, index: number) => (
-        <StyledOption key={index} value={String(index)}>
-          {item}
-        </StyledOption>
-      ))}
+    <StyledSelect width={width} onChange={change}>
+      <StyledOption value={""}>{filterName}</StyledOption>
+      {data.map((item: string, index: number) => {
+        return (
+          <StyledOption key={index} value={String(item)}>
+            {item}
+          </StyledOption>
+        );
+      })}
     </StyledSelect>
   );
 };

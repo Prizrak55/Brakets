@@ -3,7 +3,7 @@
     {
       "id": 1,
       "name": "Лига Чемпионов",
-      "status": 1,
+      "status": 0,
       "createAt": "Mon Dec 26 2022 09:39:34 GMT+0300 (Москва, стандартное время)",
       "type": "singleElimination",
       "comands": [
@@ -13,8 +13,8 @@
     },
     {
       "id": 2,
-      "name": "ЧМ2022",
-      "status": 0,
+      "name": "ЧМ20222",
+      "status": 1,
       "createAt": "Mon Dec 27 2022 09:39:34 GMT+0300 (Москва, стандартное время)",
       "type": "doubleElimination",
       "comands": [
@@ -29,12 +29,55 @@
       ]
     },
     {
-      "id": "c03b469c-99e9-d9c0-f804-f773e7b65e9c",
-      "name": "21",
+      "id": "016de7c4-bed6-9644-1698-7f3d1b184420",
+      "name": "213",
       "status": 0,
-      "createAt": "2022-12-27T11:08:04.985Z",
+      "createAt": "2023-01-18T07:28:07.654Z",
+      "type": "",
+      "comands": []
+    },
+    {
+      "id": "c0472481-4c3c-8494-acb9-776a301d51eb",
+      "name": "21321",
+      "status": 0,
+      "createAt": "2023-01-18T08:05:50.750Z",
       "type": "singleElimination",
       "comands": []
+    }
+  ],
+  "teams": [
+    {
+      "id": "32e812e3-d69d-8e94-65a7-49d3ff30bf5c",
+      "name": "3",
+      "players": [
+        "3"
+      ],
+      "reservePlayers": [
+        "3"
+      ]
+    },
+    {
+      "id": "376bf605-a533-c661-68eb-447c0ac715cf",
+      "name": "1",
+      "players": [
+        "1",
+        "2",
+        "3"
+      ],
+      "reservePlayers": [
+        "1",
+        "2"
+      ]
+    },
+    {
+      "id": "c6696de9-dcf4-41ec-3858-83e92d3baad8",
+      "name": "213",
+      "players": [
+        "23"
+      ],
+      "reservePlayers": [
+        "23"
+      ]
     }
   ]
 }

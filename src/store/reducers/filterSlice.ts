@@ -1,7 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TypeTournament } from "./tournamentSlice";
-
-const initialState = {
+export interface Filtres {
+  filterName: string;
+  filterType: string;
+}
+const initialState: Filtres = {
   filterName: "",
   filterType: "",
 };
