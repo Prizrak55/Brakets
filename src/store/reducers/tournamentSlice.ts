@@ -43,7 +43,7 @@ export const getTournaments = createAsyncThunk(
       .get<Tournament[]>(`http://localhost:3000/brackets`)
       .then((response) => response.data)
       .catch((err) => rejectWithValue(err.message));
-
+    console.log(tournaments);
     return tournaments;
   }
 );
