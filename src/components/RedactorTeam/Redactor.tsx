@@ -1,26 +1,11 @@
-import React, { useState } from "react";
-import { createNewTeam, Team } from "../store/reducers/teamSlice";
-import { Input } from "./UI/Input";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { Button } from "./UI/Button";
-import { useAppDispatch } from "../store";
-import uuid from "react-uuid";
+import { Button } from "../../Layouts/UI/Button";
+import { Input } from "../../Layouts/UI/Input";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { getTeam, Team, updateOneTeam } from "../../store/reducers/teamSlice";
 
-const CloseWrapper = styled.div`
-  background-color: rgba(30, 30, 30, 0.5);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-`;
-
-const Conteiner = styled.div`
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: absolute;
-`;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -31,85 +16,105 @@ const Wrapper = styled.div`
   width: 400px;
   box-shadow: var(--shadow);
 `;
+
 const Text = styled.div`
   font-size: 14px;
   font-weight: bold;
 `;
 
-type IModalTeam = {
-  close: () => void;
-};
-
-const ModalTeam: React.FC<IModalTeam> = ({ close }) => {
-  const [team, setTeam] = useState<Team>({
-    id: "",
-    name: "",
-    players: [""],
-    reservePlayers: [""],
-  });
+const Redactor = () => {
+  const [newTeam, setNewTeam] = useState<Team>({} as Team);
+  const { team } = useAppSelector(({ team }) => team);
 
   const dispatch = useAppDispatch();
+  const { id } = useParams();
 
-  const handleTeam = (e: any, name: string) => {
-    setTeam({ ...team, [name]: e.target.value });
-  };
+  useEffect(() => {
+    team && setNewTeam(team);
+  }, [team]);
+
+  useEffect(() => {
+    id && dispatch(getTeam(id));
+  }, [dispatch, id]);
 
   const handleAddPlayers = (
     e: any,
     index: number,
     name: "players" | "reservePlayers"
   ) => {
-    let takePlayers = team[name];
+    let takePlayers = [...newTeam[name]];
     takePlayers[index] = e.target.value;
-    setTeam({
-      ...team,
+
+    setNewTeam({
+      ...newTeam,
       [name]: takePlayers,
     });
   };
 
   const addRowPlayer = (name: "players" | "reservePlayers") => {
-    if (name === "reservePlayers" && team.reservePlayers.length === 2) {
+    if (name === "reservePlayers" && newTeam.reservePlayers.length === 2) {
       alert("Запасных игроков может быть только 2");
       return;
     }
-    if (name === "players" && team.players.length === 5) {
+    if (name === "players" && newTeam.players.length === 5) {
       alert("Основных игроков может быть только 5");
       return;
     }
-    setTeam({
-      ...team,
-      [name]: [...team[name], ""],
+    setNewTeam({
+      ...newTeam,
+      [name]: [...newTeam[name], ""],
     });
   };
+
+  const handleTeam = (e: any, name: string) => {
+    setNewTeam({ ...newTeam, [name]: e.target.value });
+  };
   const deleteRowPlayer = (name: "players" | "reservePlayers") => {
-    if (name === "reservePlayers" && team.reservePlayers.length === 0) {
+    if (name === "reservePlayers" && newTeam.reservePlayers.length === 0) {
       return;
     }
-    if (name === "players" && team.players.length === 1) {
+    if (name === "players" && newTeam.players.length === 1) {
       alert("В команде должен быть хотябы 1 игрок");
       return;
     }
-    let takePlayers = team[name];
+    let takePlayers = [...newTeam[name]];
     takePlayers.pop();
-    setTeam({
-      ...team,
+    setNewTeam({
+      ...newTeam,
       [name]: takePlayers,
     });
   };
 
+  const checkObjNull = (obj: any): boolean | undefined => {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (typeof obj[key] === "object") {
+          if (checkObjNull(obj[key])) {
+            return true;
+          }
+        } else if (!obj[key]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   const addTeam = () => {
-    const data = { ...team, id: uuid() };
-    dispatch(createNewTeam(data));
-    close();
+    if (!checkObjNull(newTeam)) {
+      dispatch(updateOneTeam(newTeam));
+    } else {
+      alert("заполните все поля");
+    }
   };
 
   return (
-    <CloseWrapper onClick={() => close()}>
-      <Conteiner onClick={(e) => e.stopPropagation()}>
+    <>
+      {!!Object.keys(newTeam).length && (
         <Wrapper>
           <Input
             type="text"
-            value={team.name}
+            value={newTeam.name}
             placeholder="Название команды"
             onChange={(e) => handleTeam(e, "name")}
           />
@@ -121,7 +126,7 @@ const ModalTeam: React.FC<IModalTeam> = ({ close }) => {
           <button onClick={() => deleteRowPlayer("players")}>
             удалить игрока
           </button>
-          {team.players.map((player: string, index: number) => {
+          {newTeam.players.map((player: string, index: number) => {
             return (
               <Input
                 key={index}
@@ -140,7 +145,7 @@ const ModalTeam: React.FC<IModalTeam> = ({ close }) => {
           <button onClick={() => deleteRowPlayer("reservePlayers")}>
             удалить игрока
           </button>
-          {team.reservePlayers.map((player: string, index: number) => {
+          {newTeam.reservePlayers.map((player: string, index: number) => {
             return (
               <Input
                 key={index}
@@ -153,9 +158,9 @@ const ModalTeam: React.FC<IModalTeam> = ({ close }) => {
           })}
           <Button text="Создать команду" onClick={addTeam} />
         </Wrapper>
-      </Conteiner>
-    </CloseWrapper>
+      )}
+    </>
   );
 };
 
-export default ModalTeam;
+export default Redactor;

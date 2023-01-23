@@ -1,14 +1,9 @@
-import axios from "axios";
-import { errorMonitor } from "events";
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Params, useParams } from "react-router-dom";
+import { useEffect } from "react";
+
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../store";
-import {
-  getOneTournament,
-  Tournament,
-} from "../../store/reducers/tournamentSlice";
+import { getOneTournament } from "../../store/reducers/tournamentSlice";
 
 const Wrapper = styled.div`
   display: flex;
@@ -57,10 +52,10 @@ const StatsTournament = () => {
 
           <ConteinerTeam>
             <Text>Команды: </Text>
-            {!!tournament.comands && (
+            {!!tournament.teams && (
               <>
-                {tournament.comands.map((comand) => {
-                  return <Text>{comand}</Text>;
+                {tournament.teams.map((team) => {
+                  return <Text>{team}</Text>;
                 })}
               </>
             )}

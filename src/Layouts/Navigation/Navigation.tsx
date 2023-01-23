@@ -19,8 +19,12 @@ const Wrapper = styled.div`
   align-items: center;
   flex-wrap: nowrap;
 `;
-const Title = styled.p`
+interface Props {
+  margin?: string;
+}
+const Title = styled.p<Props>`
   font-weight: var(--fw-normal);
+  margin: ${(props) => props.margin};
 `;
 
 const ModeSwittcher = styled.div`
@@ -59,12 +63,15 @@ const Navigation = () => {
   }, [theme]);
 
   return (
-    <div>
+    <>
       <HeaderEl>
         <Conteiner>
           <Wrapper>
             <Link to={`/`}>
-              <Title>Bracket</Title>
+              <Title>Tournaments</Title>
+            </Link>
+            <Link to={`/teams`}>
+              <Title margin="0px 0px 0px 20px">Teams</Title>
             </Link>
             <Button onClick={toggleTournamentModal} text="Создать турнир" />
             <Button onClick={toggleTeamModal} text="Создать команду" />
@@ -78,7 +85,7 @@ const Navigation = () => {
       {openTournamentModal && <ModalBracket close={closeModal} />}
       {openTeamModal && <ModalTeam close={closeModal} />}
       <Outlet />
-    </div>
+    </>
   );
 };
 

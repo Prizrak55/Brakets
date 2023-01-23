@@ -29,14 +29,6 @@
       ]
     },
     {
-      "id": "016de7c4-bed6-9644-1698-7f3d1b184420",
-      "name": "213",
-      "status": 0,
-      "createAt": "2023-01-18T07:28:07.654Z",
-      "type": "",
-      "comands": []
-    },
-    {
       "id": "c0472481-4c3c-8494-acb9-776a301d51eb",
       "name": "21321",
       "status": 0,
@@ -57,26 +49,23 @@
       ]
     },
     {
-      "id": "376bf605-a533-c661-68eb-447c0ac715cf",
-      "name": "1",
+      "id": "9eb58b1d-3fa3-2319-b56b-1de063dea3cb",
+      "name": "3",
       "players": [
-        "1",
-        "2",
-        "3"
+        "1"
       ],
       "reservePlayers": [
-        "1",
         "2"
       ]
     },
     {
-      "id": "c6696de9-dcf4-41ec-3858-83e92d3baad8",
-      "name": "213",
+      "id": "8c0c32a1-f70c-b25c-09b9-460c07eb65a1",
+      "name": "2",
       "players": [
-        "23"
+        "1"
       ],
       "reservePlayers": [
-        "23"
+        "3"
       ]
     }
   ]

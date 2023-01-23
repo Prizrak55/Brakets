@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { TypeTournament } from "../../store/reducers/tournamentSlice";
 
 interface Props {
   width: string;
@@ -47,7 +46,6 @@ export const Select: React.FC<ISelect> = ({
   filterName = "выберите фильтр",
 }) => {
   const change = (e: { target: { value: any } }) => {
-    console.log(e.target.value, "e.target.value");
     if (e.target.value) {
       handleChange(e.target.value);
       return;

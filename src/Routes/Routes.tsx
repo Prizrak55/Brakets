@@ -5,6 +5,9 @@ import Brackets from "../pages/TournamentList";
 import CreateBrackets from "../pages/CreateTournament";
 import RedactorTournament from "../pages/RedactorTournament";
 import Tournament from "../pages/DetailedTournament";
+import Team from "../pages/DetailedTeam";
+import TeamList from "../pages/TeamList";
+import RedactorTeam from "../pages/RedactorTeam";
 const Routes = () => {
   return (
     <BrowserRouter>
@@ -17,6 +20,9 @@ const Routes = () => {
             element={<RedactorTournament />}
           />
           <Route path="tournament/:id" element={<Tournament />} />
+          <Route path="team/:id" element={<Team />} />
+          <Route path="redactor-team/:id" element={<RedactorTeam />} />
+          <Route path="teams" element={<TeamList />} />
           {/* <Route path="create-bracket" element={<Brackets />} /> */}
           {/* <Route path="users" element={<Users />}>
           <Route path="me" element={<OwnUserProfile />} />

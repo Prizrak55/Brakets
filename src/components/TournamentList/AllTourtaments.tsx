@@ -79,7 +79,6 @@ const AllTourtaments = () => {
     if (!filterName && !filterType) {
       return tournaments;
     } else {
-      console.log(filterName, " ", filterType);
       return tournaments.filter(
         (itemFilter: Tournament) =>
           itemFilter.name.toLowerCase().search(filterName.toLowerCase()) !==
@@ -129,12 +128,12 @@ const AllTourtaments = () => {
                 </>
               </TextAndEditWrapper>
               <Wrapper>
-                <Status active={Boolean(item.status)}>
+                <Status active={!!item.status}>
                   {item.status ? "активен" : "не активен"}
                 </Status>
                 <Text>{transformDate(item.createAt)}</Text>
               </Wrapper>
-              <Text>Команд: {item.comands?.length}</Text>
+              <Text>Команд: {item.teams?.length}</Text>
             </Conteiner>
           </Link>
         );

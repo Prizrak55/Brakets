@@ -9,6 +9,7 @@ export interface Team {
 }
 export interface Teams {
   teams: Team[];
+  team: null | Team;
   status: null | string;
   error: null | string | unknown;
 }
@@ -34,9 +35,39 @@ export const getTeams = createAsyncThunk(
     return teams;
   }
 );
+export const getTeam = createAsyncThunk(
+  "team/getTeam",
+  async function (id: string, { rejectWithValue }) {
+    const team = await axios
+      .get<Team>(`http://localhost:3000/teams/${id}`)
+      .then((response) => response.data)
+      .catch((err) => rejectWithValue(err.message));
+
+    return team;
+  }
+);
+export const updateOneTeam = createAsyncThunk(
+  "team/updateOneTeam",
+  async function (data: Team, { fulfillWithValue, dispatch }) {
+    await axios
+      .put(`http://localhost:3000/teams/${data.id}`, data)
+      .then(() => dispatch(updateTeam(data)))
+      .catch((err) => fulfillWithValue(err.message));
+  }
+);
+export const deleteTeam = createAsyncThunk(
+  "team/deleteTeam",
+  async function (id: string, { rejectWithValue, dispatch }) {
+    await axios
+      .delete(`http://localhost:3000/teams/${id}`)
+      .then(() => dispatch(removeTeam(id)))
+      .catch((err) => rejectWithValue(err.message));
+  }
+);
 
 const initialState: Teams = {
   teams: [],
+  team: null,
   status: null,
   error: null,
 };
@@ -47,6 +78,16 @@ const teamSlice = createSlice({
   reducers: {
     addTeam(state, action: PayloadAction<Team>) {
       state.teams.push(action.payload);
+    },
+    updateTeam(state, action: PayloadAction<Team>) {
+      state.teams.forEach((element) => {
+        if (element.id === action.payload.id) {
+          element = action.payload;
+        }
+      });
+    },
+    removeTeam(state, action: PayloadAction<string>) {
+      state.teams = state.teams.filter((team) => team.id !== action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -62,8 +103,25 @@ const teamSlice = createSlice({
       state.status = "rejected";
       state.error = action.payload;
     });
+
+    builder.addCase(getTeam.pending, (state) => {
+      state.status = "loading";
+      state.error = null;
+    });
+    builder.addCase(getTeam.fulfilled, (state, action) => {
+      state.status = "resolved";
+      state.team = action.payload;
+    });
+    builder.addCase(getTeam.rejected, (state, action) => {
+      state.status = "rejected";
+      state.error = action.payload;
+    });
+    builder.addCase(deleteTeam.rejected, (state, action) => {
+      state.status = "rejected";
+      state.error = action.payload;
+    });
   },
 });
 
 export default teamSlice.reducer;
-export const { addTeam } = teamSlice.actions;
+export const { addTeam, updateTeam, removeTeam } = teamSlice.actions;
