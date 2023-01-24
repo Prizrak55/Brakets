@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import { IoMoon, IoSunny } from "react-icons/io5";
 import { Link, Outlet } from "react-router-dom";
 import { Button } from "../UI/Button";
-import ModalBracket from "../ModalTournament";
-import ModalTeam from "../ModalTeam";
+
+import ModalTeam from "../Modals/ModalTeam";
+import ModalBracket from "../Modals/ModalTournament";
 const HeaderEl = styled.header`
   box-shadow: var(--shadow);
   background-color: var(--colors-ui-base);

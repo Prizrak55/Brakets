@@ -39,33 +39,25 @@
   ],
   "teams": [
     {
-      "id": "32e812e3-d69d-8e94-65a7-49d3ff30bf5c",
-      "name": "3",
+      "id": "602ee21f-869b-3785-1c36-b2fb21cfc60c",
+      "name": "Спартак",
       "players": [
-        "3"
+        "Павлюченко",
+        "Ликан",
+        "Пукан"
       ],
       "reservePlayers": [
-        "3"
+        "Дима"
       ]
     },
     {
-      "id": "9eb58b1d-3fa3-2319-b56b-1de063dea3cb",
-      "name": "3",
+      "id": "06e9a649-86f7-252e-bad2-75a3b65640ba",
+      "name": "Спартак Нальчик",
       "players": [
-        "1"
+        "Анастасия"
       ],
       "reservePlayers": [
-        "2"
-      ]
-    },
-    {
-      "id": "8c0c32a1-f70c-b25c-09b9-460c07eb65a1",
-      "name": "2",
-      "players": [
-        "1"
-      ],
-      "reservePlayers": [
-        "3"
+        "Жима"
       ]
     }
   ]

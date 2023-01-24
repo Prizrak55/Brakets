@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { Button } from "./UI/Button";
-import { Input } from "./UI/Input";
-import { Select } from "./UI/Select";
 import { useNavigate } from "react-router-dom";
 import uuid from "react-uuid";
+import styled from "styled-components";
+import { useAppSelector, useAppDispatch } from "../../store";
+import { getTeams } from "../../store/reducers/teamSlice";
 import {
-  createNewTournament,
-  StatusTournament,
-  Tournament,
   TypeTournament,
-} from "../store/reducers/tournamentSlice";
-import { useAppDispatch, useAppSelector } from "../store";
-import { getTeams } from "../store/reducers/teamSlice";
+  StatusTournament,
+  createNewTournament,
+  Tournament,
+} from "../../store/reducers/tournamentSlice";
+import { checkObjNull } from "../../utils/checkObjNull";
+import { Button } from "../UI/Button";
+import { Input } from "../UI/Input";
+import { Select } from "../UI/Select";
 
 const CloseWrapper = styled.div`
   background-color: rgba(30, 30, 30, 0.5);
@@ -57,6 +58,9 @@ const ModalBracket: React.FC<IModalBracket> = ({ close }) => {
   const [typeBracket, setTypeBracket] = useState<TypeTournament>("");
   const { teams } = useAppSelector(({ team }) => team);
   const [newTeams, setNewTeams] = useState<string[]>([]);
+
+  const { tournaments } = useAppSelector(({ tournament }) => tournament);
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -90,6 +94,15 @@ const ModalBracket: React.FC<IModalBracket> = ({ close }) => {
       alert("Заполните тип");
       return;
     }
+
+    const checkName = tournaments.every(
+      (tournamentArr) => tournamentArr.name !== name
+    );
+    if (!checkName) {
+      alert("Команда с таким именем уже существует");
+      return;
+    }
+
     const data: Tournament = {
       id: uuid(),
       name,
@@ -98,6 +111,11 @@ const ModalBracket: React.FC<IModalBracket> = ({ close }) => {
       type: typeBracket,
       teams: newTeams,
     };
+
+    if (checkObjNull(data)) {
+      alert("заполните все поля");
+      return;
+    }
 
     dispatch(createNewTournament(data));
     close();

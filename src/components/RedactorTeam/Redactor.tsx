@@ -5,6 +5,9 @@ import { Button } from "../../Layouts/UI/Button";
 import { Input } from "../../Layouts/UI/Input";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { getTeam, Team, updateOneTeam } from "../../store/reducers/teamSlice";
+import { checkObjNull } from "../../utils/checkObjNull";
+
+import { TeamPlayers } from "./Types";
 
 const Wrapper = styled.div`
   display: flex;
@@ -24,7 +27,7 @@ const Text = styled.div`
 
 const Redactor = () => {
   const [newTeam, setNewTeam] = useState<Team>({} as Team);
-  const { team } = useAppSelector(({ team }) => team);
+  const { team, teams } = useAppSelector(({ team }) => team);
 
   const dispatch = useAppDispatch();
   const { id } = useParams();
@@ -38,9 +41,9 @@ const Redactor = () => {
   }, [dispatch, id]);
 
   const handleAddPlayers = (
-    e: any,
+    e: React.ChangeEvent<HTMLInputElement>,
     index: number,
-    name: "players" | "reservePlayers"
+    name: TeamPlayers
   ) => {
     let takePlayers = [...newTeam[name]];
     takePlayers[index] = e.target.value;
@@ -51,7 +54,7 @@ const Redactor = () => {
     });
   };
 
-  const addRowPlayer = (name: "players" | "reservePlayers") => {
+  const addRowPlayer = (name: TeamPlayers) => {
     if (name === "reservePlayers" && newTeam.reservePlayers.length === 2) {
       alert("Запасных игроков может быть только 2");
       return;
@@ -66,10 +69,10 @@ const Redactor = () => {
     });
   };
 
-  const handleTeam = (e: any, name: string) => {
+  const handleTeam = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
     setNewTeam({ ...newTeam, [name]: e.target.value });
   };
-  const deleteRowPlayer = (name: "players" | "reservePlayers") => {
+  const deleteRowPlayer = (name: TeamPlayers) => {
     if (name === "reservePlayers" && newTeam.reservePlayers.length === 0) {
       return;
     }
@@ -85,27 +88,21 @@ const Redactor = () => {
     });
   };
 
-  const checkObjNull = (obj: any): boolean | undefined => {
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        if (typeof obj[key] === "object") {
-          if (checkObjNull(obj[key])) {
-            return true;
-          }
-        } else if (!obj[key]) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
-
   const addTeam = () => {
-    if (!checkObjNull(newTeam)) {
-      dispatch(updateOneTeam(newTeam));
-    } else {
-      alert("заполните все поля");
+    const checkName = teams
+      .filter((team) => team.id !== newTeam.id)
+      .every((teamArrName) => teamArrName.name !== newTeam.name);
+
+    if (!checkName) {
+      alert("Такое имя уже используется");
+      return;
     }
+    if (checkObjNull(newTeam)) {
+      alert("заполните все поля");
+      return;
+    }
+
+    dispatch(updateOneTeam(newTeam));
   };
 
   return (

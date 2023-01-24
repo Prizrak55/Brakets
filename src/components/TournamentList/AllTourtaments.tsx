@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { MouseEvent, useEffect, useMemo } from "react";
 import {
   deleteTournament,
   getTournaments,
@@ -92,7 +92,7 @@ const AllTourtaments = () => {
     dispatch(getTournaments());
   }, [dispatch]);
 
-  const deleteOneTournament = (e: any, id: string) => {
+  const deleteOneTournament = (e: MouseEvent, id: string) => {
     e.preventDefault();
     dispatch(deleteTournament(id));
   };

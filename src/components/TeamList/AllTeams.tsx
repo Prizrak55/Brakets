@@ -57,7 +57,10 @@ const AllTeams = () => {
     dispatch(getTeams());
   }, [dispatch]);
 
-  const deleteOneTeam = (e: any, id: string) => {
+  const deleteOneTeam = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    id: string
+  ) => {
     e.preventDefault();
     dispatch(deleteTeam(id));
   };
