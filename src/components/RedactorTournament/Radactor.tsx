@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -11,6 +10,7 @@ import {
   StatusTournament,
   updateOneTournament,
 } from "../../store/reducers/tournamentSlice";
+import { checkObjNull } from "../../utils/checkObjNull";
 
 const Title = styled.h1`
   font-size: 16px;
@@ -19,7 +19,9 @@ const Title = styled.h1`
 const Redactor = () => {
   const [redactorTournament, setRedactorTournament] = useState<any>();
 
-  const { tournament } = useAppSelector(({ tournament }) => tournament);
+  const { tournament, tournaments } = useAppSelector(
+    ({ tournament }) => tournament
+  );
   const { id } = useParams();
 
   const dispatch = useAppDispatch();
@@ -49,6 +51,18 @@ const Redactor = () => {
   };
 
   const saveChange = () => {
+    const checkName = tournaments
+      .filter((tournament) => tournament.id !== redactorTournament.id)
+      .every(
+        (tournamentName) => tournamentName.name !== redactorTournament.name
+      );
+    if (checkObjNull(redactorTournament)) {
+      alert("заполните все поля");
+      return;
+    }
+    if (!checkName) {
+      alert("Имя турнира уже существует");
+    }
     dispatch(updateOneTournament(redactorTournament));
   };
 

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { createNewTeam, Team } from "../store/reducers/teamSlice";
-import { Input } from "./UI/Input";
+import React, { useEffect, useState } from "react";
+import { createNewTeam, getTeams, Team } from "../../store/reducers/teamSlice";
+import { Input } from "../UI/Input";
 import styled from "styled-components";
-import { Button } from "./UI/Button";
-import { useAppDispatch } from "../store";
+import { Button } from "../UI/Button";
+import { useAppDispatch, useAppSelector } from "../../store";
 import uuid from "react-uuid";
+import { TeamPlayers } from "./Types";
+import { checkObjNull } from "../../utils/checkObjNull";
 
 const CloseWrapper = styled.div`
   background-color: rgba(30, 30, 30, 0.5);
@@ -48,16 +50,22 @@ const ModalTeam: React.FC<IModalTeam> = ({ close }) => {
     reservePlayers: [""],
   });
 
+  const { teams } = useAppSelector(({ team }) => team);
+
   const dispatch = useAppDispatch();
 
-  const handleTeam = (e: any, name: string) => {
+  useEffect(() => {
+    dispatch(getTeams());
+  }, [dispatch]);
+
+  const handleTeam = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
     setTeam({ ...team, [name]: e.target.value });
   };
 
   const handleAddPlayers = (
-    e: any,
+    e: React.ChangeEvent<HTMLInputElement>,
     index: number,
-    name: "players" | "reservePlayers"
+    name: TeamPlayers
   ) => {
     let takePlayers = team[name];
     takePlayers[index] = e.target.value;
@@ -67,7 +75,7 @@ const ModalTeam: React.FC<IModalTeam> = ({ close }) => {
     });
   };
 
-  const addRowPlayer = (name: "players" | "reservePlayers") => {
+  const addRowPlayer = (name: TeamPlayers) => {
     if (name === "reservePlayers" && team.reservePlayers.length === 2) {
       alert("Запасных игроков может быть только 2");
       return;
@@ -81,8 +89,36 @@ const ModalTeam: React.FC<IModalTeam> = ({ close }) => {
       [name]: [...team[name], ""],
     });
   };
+  const deleteRowPlayer = (name: TeamPlayers) => {
+    if (name === "reservePlayers" && team.reservePlayers.length === 0) {
+      return;
+    }
+    if (name === "players" && team.players.length === 1) {
+      alert("В команде должен быть хотябы 1 игрок");
+      return;
+    }
+    let takePlayers = team[name];
+    takePlayers.pop();
+    setTeam({
+      ...team,
+      [name]: takePlayers,
+    });
+  };
 
   const addTeam = () => {
+    const checkName = teams.every(
+      (teamArrName) => teamArrName.name !== team.name
+    );
+
+    if (!checkName) {
+      alert("Название команды уже существует");
+      return;
+    }
+    if (checkObjNull(team)) {
+      alert("заполните все поля");
+      return;
+    }
+
     const data = { ...team, id: uuid() };
     dispatch(createNewTeam(data));
     close();
@@ -103,6 +139,9 @@ const ModalTeam: React.FC<IModalTeam> = ({ close }) => {
           <button onClick={() => addRowPlayer("players")}>
             добавить игрока
           </button>
+          <button onClick={() => deleteRowPlayer("players")}>
+            удалить игрока
+          </button>
           {team.players.map((player: string, index: number) => {
             return (
               <Input
@@ -118,6 +157,9 @@ const ModalTeam: React.FC<IModalTeam> = ({ close }) => {
           <Text>Резервные игроки</Text>
           <button onClick={() => addRowPlayer("reservePlayers")}>
             добавить игрока
+          </button>
+          <button onClick={() => deleteRowPlayer("reservePlayers")}>
+            удалить игрока
           </button>
           {team.reservePlayers.map((player: string, index: number) => {
             return (

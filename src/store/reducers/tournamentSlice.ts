@@ -18,12 +18,12 @@ export interface Tournament {
   status: StatusTournament;
   createAt: Date;
   type: TypeTournament;
-  comands?: string[];
+  teams?: string[];
 }
 export interface TournamentsState {
   tournaments: Tournament[];
   status: null | string;
-  error: any;
+  error: string;
   tournament: Tournament | null;
 }
 
@@ -133,19 +133,19 @@ const tournamentSlice = createSlice({
     //rejected cases
     builder.addCase(getTournaments.rejected, (state, action) => {
       state.status = "rejected";
-      state.error = action.payload;
+      state.error = action.payload as string;
     });
     builder.addCase(deleteTournament.rejected, (state, action) => {
       state.status = "rejected";
-      state.error = action.payload;
+      state.error = action.payload as string;
     });
     builder.addCase(getOneTournament.rejected, (state, action) => {
       state.status = "rejected";
-      state.error = action.payload;
+      state.error = action.payload as string;
     });
     builder.addCase(createNewTournament.rejected, (state, action) => {
       state.status = "rejected";
-      state.error = action.payload;
+      state.error = action.payload as string;
     });
   },
 });
